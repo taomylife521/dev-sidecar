@@ -37,25 +37,22 @@ module.exports = defineConfig({
       // Ref: https://github.com/nklayman/vue-cli-plugin-electron-builder/issues/1891
       customFileProtocol: './',
       externals: [
-        '@mihomo-party/sysproxy',
-        '@mihomo-party/sysproxy-win32-ia32-msvc',
-        '@mihomo-party/sysproxy-win32-x64-msvc',
-        '@mihomo-party/sysproxy-win32-arm64-msvc',
-        '@mihomo-party/sysproxy-linux-x64-gnu',
-        '@mihomo-party/sysproxy-linux-arm64-gnu',
-        '@mihomo-party/sysproxy-darwin-x64',
-        '@mihomo-party/sysproxy-darwin-arm64',
-        '@natmri/platform-napi',
-        '@natmri/platform-napi-win32-ia32-msvc',
-        '@natmri/platform-napi-win32-x64-msvc',
-        '@natmri/platform-napi-win32-arm64-msvc',
-        '@natmri/platform-napi-linux-x64-gnu',
-        '@natmri/platform-napi-linux-x64-musl',
-        '@natmri/platform-napi-linux-arm64-gnu',
-        '@natmri/platform-napi-linux-arm64-musl',
-        '@natmri/platform-napi-linux-arm-gnueabihf',
-        '@natmri/platform-napi-darwin-x64',
-        '@natmri/platform-napi-darwin-arm64',
+        '@starknt/sysproxy',
+        '@starknt/sysproxy-win32-ia32-msvc',
+        '@starknt/sysproxy-win32-x64-msvc',
+        '@starknt/sysproxy-win32-arm64-msvc',
+        '@starknt/sysproxy-linux-x64-gnu',
+        '@starknt/sysproxy-linux-arm64-gnu',
+        '@starknt/sysproxy-darwin-x64',
+        '@starknt/sysproxy-darwin-arm64',
+        '@starknt/shutdown-handler-napi',
+        '@starknt/shutdown-handler-napi-win32-ia32-msvc',
+        '@starknt/shutdown-handler-napi-win32-x64-msvc',
+        '@starknt/shutdown-handler-napi-win32-arm64-msvc',
+        '@starknt/shutdown-handler-napi-linux-x64-gnu',
+        '@starknt/shutdown-handler-napi-linux-arm64-gnu',
+        '@starknt/shutdown-handler-napi-darwin-x64',
+        '@starknt/shutdown-handler-napi-darwin-arm64',
       ],
       nodeIntegration: true,
       // Provide an array of files that, when changed, will recompile the main process and restart Electron
@@ -77,14 +74,13 @@ module.exports = defineConfig({
         appId: 'dev-sidecar',
         productName: 'dev-sidecar',
         // eslint-disable-next-line no-template-curly-in-string
-        artifactName: 'DevSidecar-${version}.${ext}',
+        artifactName: 'DevSidecar-${version}-${arch}.${ext}',
         copyright: 'Copyright © 2020-2024 Greper, WangLiang',
         nsis: {
           oneClick: false,
           perMachine: true,
           allowElevation: true,
           allowToChangeInstallationDirectory: true,
-          include: './build/installer.nsh',
         },
         mac: {
           icon: './build/mac/icon.icns',
@@ -92,22 +88,36 @@ module.exports = defineConfig({
             arch: 'universal',
             target: 'dmg',
           },
+          category: 'public.app-category.developer-tools',
         },
         win: {
           icon: 'build/icons/',
-          // requestedExecutionLevel: 'highestAvailable' // 加了这个无法开机自启
+          target: [
+            {
+              target: 'nsis',
+              arch: ['x64', 'ia32', 'arm64'],
+            },
+          ],
+          // requestedExecutionLevel: 'highestAvailable', // 加了这个无法开机自启
         },
         linux: {
           icon: 'build/mac/',
           target: [
-            'deb',
-            'AppImage',
+            {
+              target: 'deb',
+              arch: ['x64', 'arm64'],
+            },
+            {
+              target: 'AppImage',
+              arch: ['x64', 'arm64'],
+            },
           ],
+          category: 'System',
         },
         publish: {
           provider: publishProvider,
           url: publishUrl,
-          // url: 'http://dev-sidecar.docmirror.cn/update/preview/'
+          // url: 'http://dev-sidecar.docmirror.cn/update/preview/',
         },
       },
       chainWebpackMainProcess (config) {

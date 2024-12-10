@@ -113,7 +113,7 @@ module.exports = {
       log.info('proxy choice:', JSON.stringify(context.requestCount))
     }
 
-    if (interceptOpt.sni != null) {
+    if (interceptOpt.sni) {
       let unVerifySsl = rOptions.agent.options.rejectUnauthorized === false
 
       rOptions.servername = interceptOpt.sni
@@ -122,11 +122,22 @@ module.exports = {
         rOptions.agent = rOptions.agent.unVerifySslAgent
         unVerifySsl = true
       }
-      res.setHeader('DS-Interceptor', `proxy: ${proxyTarget}, sni: ${interceptOpt.sni}${unVerifySsl ? ', unVerifySsl' : ''}`)
-      log.info('proxy intercept: hostname:', originHostname, ', target：', proxyTarget, ', sni replace servername:', rOptions.servername, (unVerifySsl ? ', unVerifySsl' : ''))
+
+      const unVerifySslStr = unVerifySsl ? ', unVerifySsl' : ''
+      res.setHeader('DS-Interceptor', `proxy: ${proxyTarget}, sni: ${interceptOpt.sni}${unVerifySslStr}`)
+      log.info(`proxy intercept: hostname: ${originHostname}, target: ${proxyTarget}, sni replace servername: ${rOptions.servername}${unVerifySslStr}`)
+    } else if (interceptOpt.unVerifySsl === true) {
+      if (rOptions.agent.options.rejectUnauthorized && rOptions.agent.unVerifySslAgent) {
+        rOptions.agent = rOptions.agent.unVerifySslAgent
+        res.setHeader('DS-Interceptor', `proxy: ${proxyTarget}, unVerifySsl`)
+        log.info(`proxy intercept: hostname: ${originHostname}, target: ${proxyTarget}, unVerifySsl`)
+      } else {
+        res.setHeader('DS-Interceptor', `proxy: ${proxyTarget}, already unVerifySsl`)
+        log.info(`proxy intercept: hostname: ${originHostname}, target: ${proxyTarget}, already unVerifySsl`)
+      }
     } else {
       res.setHeader('DS-Interceptor', `proxy: ${proxyTarget}`)
-      log.info('proxy intercept: hostname:', originHostname, ', target：', proxyTarget)
+      log.info(`proxy intercept: hostname: ${originHostname}, target：${proxyTarget}`)
     }
 
     return true

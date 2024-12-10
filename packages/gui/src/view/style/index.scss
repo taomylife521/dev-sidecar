@@ -30,6 +30,9 @@
   margin-right: 20px;
 }
 
+.md-mt-0 {
+  margin-top: 0;
+}
 .md-mt-5 {
   margin-top: 5px;
 }
@@ -136,5 +139,60 @@ hr {
     background-color: #eee;
     padding: 2px 5px;
     margin: 0 5px 5px 5px;
+  }
+}
+
+.help-list {
+  ul {
+    padding-left: 10px;
+
+    li {
+      list-style: none;
+      line-height: 30px;
+
+      div {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 14px;
+      }
+
+      a {
+        color: #3990e0;
+      }
+      a:hover {
+        text-decoration: underline;
+        color: #2c9be5;
+      }
+    }
+
+    // 嵌套列表
+    ul {
+      padding-left: 20px;
+    }
+  }
+
+  ul:first-child li:first-child div:first-child.title1 {
+    margin-top: 0;
+  }
+
+  .title1 {
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+  }
+
+  .title2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .console {
+    font-family: Consolas, arial, serif;
   }
 }

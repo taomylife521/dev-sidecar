@@ -68,7 +68,7 @@ module.exports = {
       },
 
       // 慢速IP延迟时间：测速超过该值时，则视为延迟高，显示为橙色
-      lowSpeedDelay: 150,
+      lowSpeedDelay: 200,
     },
     compatible: {
       // **** 自定义兼容配置 **** //
@@ -419,4 +419,15 @@ module.exports = {
   },
   proxy: {},
   plugin: {},
+  help: {
+    dataList: [
+      {
+        title: '查看DevSidecar的说明文档（Wiki）',
+        url: 'https://github.com/docmirror/dev-sidecar/wiki',
+      },
+      {
+        title: '为了展示更多帮助信息，请启用 “远程配置” 功能！！！',
+      },
+    ],
+  },
 }

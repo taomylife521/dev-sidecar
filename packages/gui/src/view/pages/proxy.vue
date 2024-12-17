@@ -32,10 +32,6 @@ export default {
       try {
         await this.$api.proxy.setEnableLoopback()
       } catch (e) {
-        if (e.message.includes('EACCES')) {
-          this.$message.error('请将DevSidecar关闭后，以管理员身份重新打开，再尝试此操作')
-          return
-        }
         this.$message.error(`打开失败：${e.message}`)
       }
     },
@@ -112,7 +108,7 @@ export default {
           注意：当前已打开的命令行并不会实时生效，需要重新打开一个新的命令行窗口
         </div>
       </a-form-item>
-      <a-form-item v-if="isWindows()" label="设置loopback" :label-col="labelCol" :wrapper-col="wrapperCol">
+      <a-form-item v-if="isWindows()" label="设置Loopback" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-button @click="loopbackVisible = true">
           去设置
         </a-button>
@@ -192,7 +188,6 @@ export default {
       <div>
         <div>1、此设置用于解决OneNote、MicrosoftStore、Outlook等UWP应用无法访问网络的问题。</div>
         <div>2、点击右上方按钮，打开EnableLoopback，然后按下图所示操作即可</div>
-        <div>3、注意：此操作需要<b style="color:red">DevSidecar以管理员身份启动</b>，才能打开下面的EnableLoopback设置界面</div>
         <img style="margin-top:20px;border:1px solid #eee" width="80%" src="loopback.png">
       </div>
     </a-drawer>
